@@ -336,4 +336,5 @@ src/build
 *.zip
 
 output
+map_dump
 # End of https://www.toptal.com/developers/gitignore/api/python,windows,linux,macos,visualstudiocode,pycharm
