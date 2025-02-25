@@ -1,1 +1,5 @@
-pre-commit
+configparser==7.1.0
+matplotlib==3.10.0
+names_generator==0.2.0
+numpy==2.2.3
+plotly==6.0.0
