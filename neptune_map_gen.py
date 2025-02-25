@@ -1,12 +1,10 @@
 import numpy as np
 import random
-import math
 import json
 import os
 import configparser
 from names_generator import generate_name
 from datetime import datetime
-import plotly.express as px
 import plotly.graph_objects as go
 
 # Load configuration from file
@@ -22,9 +20,8 @@ radius_limit = config.getfloat("galaxy", "radius_limit")
 galaxy_type = config.get("galaxy", "galaxy_type")
 wormholes = json.loads(config.get("wormholes", "pairs"))
 
-def generate_spiral_galaxy(
-    total_points, num_arms, pitch_angle, min_distance, radius_limit
-):
+
+def generate_spiral_galaxy(total_points, num_arms, pitch_angle, min_distance, radius_limit):
     coordinates = []
 
     while len(coordinates) < total_points:
@@ -46,9 +43,7 @@ def generate_spiral_galaxy(
         y = radius * np.sin(arm_angle)
 
         # Check if the new point is at least min_distance from all existing points
-        if all(
-            np.linalg.norm([x - cx, y - cy]) >= min_distance for cx, cy in coordinates
-        ):
+        if all(np.linalg.norm([x - cx, y - cy]) >= min_distance for cx, cy in coordinates):
             coordinates.append((x, y))
 
     return np.array(coordinates)
@@ -67,9 +62,7 @@ def generate_elliptical_galaxy(total_points, min_distance, radius_limit):
         y = radius * np.sin(angle)
 
         # Check if the new point is at least min_distance from all existing points
-        if all(
-            np.linalg.norm([x - cx, y - cy]) >= min_distance for cx, cy in coordinates
-        ):
+        if all(np.linalg.norm([x - cx, y - cy]) >= min_distance for cx, cy in coordinates):
             coordinates.append((x, y))
 
     return np.array(coordinates)
@@ -84,20 +77,16 @@ def generate_irregular_galaxy(total_points, min_distance, radius_limit):
         y = np.random.uniform(-radius_limit, radius_limit)
 
         # Check if the new point is at least min_distance from all existing points
-        if all(
-            np.linalg.norm([x - cx, y - cy]) >= min_distance for cx, cy in coordinates
-        ):
+        if all(np.linalg.norm([x - cx, y - cy]) >= min_distance for cx, cy in coordinates):
             coordinates.append((x, y))
 
     return np.array(coordinates)
 
+
 if __name__ == "__main__":
-        
     # Generate the galaxy based on the type specified in the config
     if galaxy_type == "spiral":
-        coordinates = generate_spiral_galaxy(
-            total_points, num_arms, pitch_angle, min_distance, radius_limit
-        )
+        coordinates = generate_spiral_galaxy(total_points, num_arms, pitch_angle, min_distance, radius_limit)
     elif galaxy_type == "elliptical":
         coordinates = generate_elliptical_galaxy(total_points, min_distance, radius_limit)
     elif galaxy_type == "irregular":
@@ -129,7 +118,6 @@ if __name__ == "__main__":
     # Convert to JSON
     json_output = json.dumps(result, indent=4)
 
-
     epoch = int(datetime.now().timestamp())
     # Create output directory if it doesn't exist
     output_dir = f"./map_dump/{epoch}"
@@ -149,33 +137,39 @@ if __name__ == "__main__":
     fig = go.Figure()
 
     # Add stars to the plot with tooltips
-    fig.add_trace(go.Scatter(
-        x=coordinates[:, 0], y=coordinates[:, 1],
-        mode='markers',
-        marker=dict(color='white', size=5, symbol='star'),
-        text=star_names,
-        hoverinfo='text',
-        name='Stars'
-    ))
+    fig.add_trace(
+        go.Scatter(
+            x=coordinates[:, 0],
+            y=coordinates[:, 1],
+            mode="markers",
+            marker=dict(color="white", size=5, symbol="star"),
+            text=star_names,
+            hoverinfo="text",
+            name="Stars",
+        )
+    )
 
     # Add wormholes to the plot
     for pair in wormholes:
         star1 = coordinates[pair[0] - 1]
         star2 = coordinates[pair[1] - 1]
-        fig.add_trace(go.Scatter(
-            x=[star1[0], star2[0]], y=[star1[1], star2[1]],
-            mode='lines+markers',
-            marker=dict(color='red', size=5),
-            line=dict(color='red'),
-            name='Wormholes'
-        ))
+        fig.add_trace(
+            go.Scatter(
+                x=[star1[0], star2[0]],
+                y=[star1[1], star2[1]],
+                mode="lines+markers",
+                marker=dict(color="red", size=5),
+                line=dict(color="red"),
+                name="Wormholes",
+            )
+        )
 
     fig.update_layout(
-        title=f'Galaxy Map - {galaxy_type.capitalize()} Galaxy : EPOCH - {epoch}',
-        xaxis_title='X Coordinate',
-        yaxis_title='Y Coordinate',
-        plot_bgcolor='black',
-        showlegend=True
+        title=f"Galaxy Map - {galaxy_type.capitalize()} Galaxy: EPOCH - {epoch}",
+        xaxis_title="X Coordinate",
+        yaxis_title="Y Coordinate",
+        plot_bgcolor="black",
+        showlegend=True,
     )
 
     # Save the plot as an HTML file
