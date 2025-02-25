@@ -1,5 +1,5 @@
 # Neptune Map Generator
-This project generates a map of a galaxy with stars and wormholes based on configurable parameters. The galaxy can be of different types: spiral, elliptical, or irregular.
+This project generates a map of a galaxy for the [Neptunes' Pride game](https://neptunespride4.appspot.com/) with stars and wormholes based on configurable parameters. The galaxy can be of different types: spiral, elliptical, or irregular.
 
 ## Project Structure
 
@@ -79,4 +79,4 @@ Example output files:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](license.md) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.
