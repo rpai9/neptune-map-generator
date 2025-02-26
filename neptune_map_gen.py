@@ -98,6 +98,7 @@ if __name__ == "__main__":
     star_names = []
     for i, coord in enumerate(coordinates, start=1):
         star_name = generate_name(seed=i)
+        star_name = "-".join([j.capitalize() for j in star_name.split("_")])
         star = {
             "uid": i,
             "name": star_name,
@@ -165,11 +166,13 @@ if __name__ == "__main__":
         )
 
     fig.update_layout(
-        title=f"Galaxy Map - {galaxy_type.capitalize()} Galaxy: EPOCH - {epoch}",
+        title={"text": f"Galaxy Map - {galaxy_type.capitalize()} Galaxy: EPOCH - {epoch}", "x": 0.5, "xanchor": "center"},  # Center the title
         xaxis_title="X Coordinate",
         yaxis_title="Y Coordinate",
         plot_bgcolor="black",
         showlegend=True,
+        xaxis=dict(showgrid=False, zeroline=False),  # Remove x-axis grid and zero lines
+        yaxis=dict(showgrid=False, zeroline=False),  # Remove y-axis grid and zero lines
     )
 
     # Save the plot as an HTML file
