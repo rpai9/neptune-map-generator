@@ -1,7 +1,7 @@
 # Neptune Map Generator
 This project generates a map of a galaxy for the [Neptunes' Pride game](https://neptunespride4.appspot.com/) with stars and wormholes based on configurable parameters. The galaxy can be of different types: spiral, elliptical, or irregular.
 
-The code also allows you to visualize the galaxy generated through an HTML file. You can view an example [here](.assets/1740527100/galaxy_map.html).
+The code also allows you to visualize the galaxy generated through an HTML file. You can view an example [here](.assets/1740527100/editable_galaxy_map.html). There is also an editable map that gets generated every time the code is run, allowing the user to update the settings on the fly.
 
 ![Galaxy Animation](.assets/galaxy.gif)
 
