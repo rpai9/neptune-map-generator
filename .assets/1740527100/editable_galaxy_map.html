@@ -1,4 +1,42 @@
-{
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Galaxy Map</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #202735;
+            color: white;
+        }
+        textarea {
+            width: 80%;
+            height: 200px;
+            margin: 20px 0;
+            background-color: #333;
+            color: white;
+            border: 1px solid #555;
+            padding: 10px;
+        }
+        #plot {
+            background-color: #333;
+            width: 90%;
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editable Galaxy Map</h1>
+    <textarea id="jsonInput"></textarea>
+    <button onclick="updatePlot()">Update Plot</button>
+    <div id="plot"></div>
+
+    <script>
+        const initialData = {
     "stars": [
         {
             "uid": 1,
@@ -7229,4 +7267,82 @@
             150
         ]
     ]
-}
+};
+
+        document.getElementById('jsonInput').value = JSON.stringify(initialData, null, 4);
+
+        function updatePlot() {
+            const jsonData = JSON.parse(document.getElementById('jsonInput').value);
+            const stars = jsonData.stars;
+            const wormholes = jsonData.wormholes;
+
+            const starTraces = stars.map(star => ({
+                x: [star.x],
+                y: [star.y],
+                mode: 'markers',
+                marker: {
+                    color: star.puid ? `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})` : 'white',
+                    size: 10,
+                    symbol: 'star'
+                },
+                text: `Index: ${star.uid}, Name: ${star.name}, Resources: ${star.r}, G: ${star.g}, E: ${star.e}, I: ${star.i}, S: ${star.s}, ST: ${star.st}`,
+                hoverinfo: 'text',
+                name: star.puid ? `Player ${star.puid}` : star.name,
+                showlegend: true
+            }));
+
+            const wormholeTraces = wormholes.map(pair => {
+                const star1 = stars.find(star => star.uid === pair[0]);
+                const star2 = stars.find(star => star.uid === pair[1]);
+                return {
+                    x: [star1.x, star2.x],
+                    y: [star1.y, star2.y],
+                    mode: 'lines+markers',
+                    marker: {
+                        color: 'red',
+                        size: 5
+                    },
+                    line: {
+                        color: 'red'
+                    },
+                    name: 'Wormholes',
+                    showlegend: true
+                };
+            });
+
+            const data = [...starTraces, ...wormholeTraces];
+
+            const layout = {
+                title: {
+                    text: 'Galaxy Map',
+                    x: 0.5,
+                    xanchor: 'center'
+                },
+                xaxis: {
+                    title: 'X Coordinate',
+                    showgrid: false,
+                    zeroline: false
+                },
+                yaxis: {
+                    title: 'Y Coordinate',
+                    showgrid: false,
+                    zeroline: false
+                },
+                plot_bgcolor: '#202735',
+                legend: {
+                    bgcolor: '#000',  // Set legend background color to black
+                    font: {
+                        color: 'white'  // Set legend text color to white
+                    }
+                },
+                showlegend: true,
+                hovermode: 'closest'  // Ensure tooltips are shown individually
+            };
+
+            Plotly.newPlot('plot', data, layout);
+        }
+
+        updatePlot();
+    </script>
+</body>
+</html>

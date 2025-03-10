@@ -235,4 +235,15 @@ if __name__ == "__main__":
     # Save the plot as an HTML file
     fig.write_html(f"{output_dir}/galaxy_map.html")
 
+    # Read the HTML template
+    with open("editable_map.html") as template_file:
+        editable_html_template = template_file.read()
+
+    # Replace the placeholder with the actual data
+    editable_html_content = editable_html_template.replace("{{ initial_data }}", json.dumps(result, indent=4))
+
+    # Write the editable HTML content to a file
+    with open(f"{output_dir}/editable_galaxy_map.html", "w") as f:
+        f.write(editable_html_content)
+
     print("Map generated successfully! Check the map_dump folder for the output.")
