@@ -1,4 +1,4 @@
-configparser==7.1.0
+configparser==7.2.0
 matplotlib==3.10.1
 names_generator==0.2.0
 numpy==2.2.3
